@@ -1,0 +1,4 @@
+project_id = "questime"
+
+[functions.generate-quest]
+verify_jwt = true

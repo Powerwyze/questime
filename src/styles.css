@@ -1,0 +1,195 @@
+:root {
+  color: #17201c;
+  background: #eef6f1;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; min-height: 100vh; }
+button, input, select { font: inherit; }
+button, summary { cursor: pointer; }
+
+.app-shell {
+  min-height: 100vh;
+  padding: max(16px, env(safe-area-inset-top)) 16px 40px;
+  background: linear-gradient(180deg, #dff6ed 0, #f8fbf9 380px);
+}
+
+.topbar, .quest-card, .grown-up-panel { width: min(680px, 100%); margin-inline: auto; }
+
+.topbar {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0 16px;
+}
+
+.topbar > strong { font-size: 1.3rem; }
+.brand-mark {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  color: #fff;
+  background: #13795b;
+  border-radius: 8px;
+}
+
+.reward-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 0 11px;
+  color: #624900;
+  font-weight: 850;
+  background: #ffd75e;
+  border: 1px solid #e6bd3c;
+  border-radius: 8px;
+}
+
+.quest-card {
+  padding: 26px;
+  background: #fff;
+  border: 2px solid #cfe5da;
+  border-radius: 8px;
+  box-shadow: 0 18px 40px rgba(31, 80, 59, 0.1);
+}
+
+.hello { margin: 0 0 4px; color: #13795b; font-size: 1.2rem; font-weight: 900; }
+h1 { margin: 0 0 18px; font-size: 1.55rem; line-height: 1.2; }
+
+.goal-banner {
+  padding: 20px;
+  color: #fff;
+  background: #17201c;
+  border-radius: 8px;
+  font-size: clamp(1.55rem, 5vw, 2.25rem);
+  font-weight: 900;
+  line-height: 1.15;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.kid-steps { display: grid; gap: 10px; padding: 0; margin: 18px 0; list-style: none; }
+.kid-steps li {
+  display: grid;
+  grid-template-columns: 50px minmax(0, 1fr) 30px;
+  align-items: center;
+  gap: 12px;
+  min-height: 82px;
+  padding: 12px 14px;
+  background: #f4f8f5;
+  border: 1px solid #d9e7df;
+  border-radius: 8px;
+}
+
+.step-number {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  color: #fff;
+  background: #168363;
+  border-radius: 50%;
+  font-size: 1.45rem;
+  font-weight: 950;
+}
+
+.kid-steps strong { display: block; font-size: 1.08rem; line-height: 1.25; }
+.kid-steps li div span { display: block; margin-top: 3px; color: #65736c; font-size: .92rem; }
+.step-icon { color: #168363; }
+.step-icon.reward { color: #d7a900; fill: #ffd75e; }
+
+.start-button {
+  display: flex;
+  width: 100%;
+  min-height: 62px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 18px;
+  color: #fff;
+  background: #13795b;
+  border: 0;
+  border-radius: 8px;
+  box-shadow: 0 9px 0 #0c563f;
+  font-size: 1.25rem;
+  font-weight: 950;
+}
+
+.start-button:active { transform: translateY(4px); box-shadow: 0 5px 0 #0c563f; }
+.status-message { min-height: 20px; margin: 18px 0 0; color: #5d6c65; font-weight: 700; text-align: center; }
+
+.grown-up-panel { margin-top: 14px; background: #fff; border: 1px solid #d6e3dc; border-radius: 8px; }
+.grown-up-panel summary {
+  display: flex;
+  min-height: 56px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  font-weight: 850;
+  list-style: none;
+}
+.grown-up-panel summary::-webkit-details-marker { display: none; }
+.grown-up-panel summary span { display: flex; align-items: center; gap: 9px; }
+.grown-up-panel[open] summary > svg { transform: rotate(180deg); }
+.settings-body { padding: 4px 18px 20px; border-top: 1px solid #e3ebe6; }
+
+.field { display: grid; gap: 7px; margin-top: 16px; color: #44534c; font-weight: 800; }
+.field input, .field select {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 12px;
+  color: #17201c;
+  background: #f8faf9;
+  border: 1px solid #cbdad2;
+  border-radius: 8px;
+}
+.field input:focus, .field select:focus { outline: 3px solid rgba(19, 121, 91, .17); border-color: #13795b; }
+.time-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+fieldset { padding: 0; margin: 18px 0 0; border: 0; }
+legend { margin-bottom: 8px; color: #44534c; font-weight: 800; }
+.target-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.target {
+  display: flex;
+  min-width: 0;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px;
+  color: #506159;
+  background: #f5f7f6;
+  border: 1px solid #d6e1db;
+  border-radius: 8px;
+}
+.target.selected { color: #0d5c43; background: #ddf5e9; border-color: #85d2b3; }
+.grown-up-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
+.make-button, .access-button {
+  display: flex;
+  min-height: 50px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 850;
+}
+.make-button { color: #fff; background: #17201c; border: 0; }
+.make-button:disabled { opacity: .7; }
+.access-button { color: #17201c; background: #ffd75e; border: 1px solid #e3b82f; }
+.device-note { margin: 14px 0 0; color: #66756e; font-size: .88rem; text-align: center; }
+
+@media (max-width: 520px) {
+  .app-shell { padding-inline: 10px; }
+  .quest-card { padding: 16px; }
+  .goal-banner { padding: 17px 12px; }
+  .kid-steps li { grid-template-columns: 44px minmax(0, 1fr) 26px; gap: 10px; padding-inline: 10px; }
+  .step-number { width: 42px; height: 42px; }
+  .time-grid, .grown-up-actions { grid-template-columns: 1fr; }
+  .target-grid { grid-template-columns: repeat(2, 1fr); }
+}

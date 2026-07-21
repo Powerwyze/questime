@@ -1,0 +1,27 @@
+{
+  "version": "5",
+  "remote": {
+    "https://deno.land/std@0.224.0/async/delay.ts": "f90dd685b97c2f142b8069082993e437b1602b8e2561134827eeb7c12b95c499",
+    "https://deno.land/std@0.224.0/http/server.ts": "f9313804bf6467a1704f45f76cb6cd0a3396a3b31c316035e6a4c2035d1ea514"
+  },
+  "workspace": {
+    "packageJson": {
+      "dependencies": [
+        "npm:@capacitor/android@8",
+        "npm:@capacitor/cli@8",
+        "npm:@capacitor/core@8",
+        "npm:@capacitor/ios@8",
+        "npm:@supabase/supabase-js@^2.57.0",
+        "npm:@types/react-dom@^19.1.9",
+        "npm:@types/react@^19.1.12",
+        "npm:@vitejs/plugin-react@5",
+        "npm:lucide-react@0.540",
+        "npm:playwright-core@^1.61.1",
+        "npm:react-dom@^19.1.1",
+        "npm:react@^19.1.1",
+        "npm:typescript@^5.9.2",
+        "npm:vite@^7.1.3"
+      ]
+    }
+  }
+}
