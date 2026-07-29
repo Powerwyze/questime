@@ -1,48 +1,61 @@
 # Questime
 
-Questime is a Capacitor-first family screen-time app. The web layer owns the dashboard, quest generation, and Supabase calls. Native iOS/Android code owns device screen-time permissions and enforcement.
+Questime turns time into quests with AI verification, personalized Handler coaching, and social accountability.
 
-This repository is the Capacitor fallback prototype. Active product development continues in the Flutter-based [TaskAssassin repository](https://github.com/Powerwyze/TaskAssassin), which is being renamed and evolved into Questime.
+This repository is pivoting from the TaskAssassin prototype. The Flutter package name is still `taskassassin` for now to avoid a risky mechanical import rewrite during the product pivot.
 
-## Run the web app
+## What Changed In The Pivot
 
-```bash
-npm install
-npm run dev
+- Product-facing app name is Questime.
+- Android and web metadata now use Questime branding.
+- Android application ID is prepared as `com.powerwyze.questime`.
+- iOS display metadata now uses Questime branding.
+- The Flutter app no longer packages `.env` as an asset.
+- Gemini calls are routed through the Supabase `gemini-chat` Edge Function.
+- Gemini API keys belong in Supabase Edge Function secrets, never in the Flutter client.
+- Push notifications are disabled by default until Firebase is registered for the final app IDs.
+
+## Mobile Release Path
+
+See [docs/mobile-release.md](docs/mobile-release.md) for the Android and iOS release checklist, signing requirements, Firebase setup, and store metadata tasks.
+
+## Flutter Build Configuration
+
+Release builds can override app configuration with Dart defines:
+
+```sh
+flutter build appbundle --release \
+  --dart-define=SUPABASE_URL=https://foplbkcnkrolglzxayjt.supabase.co \
+  --dart-define=SUPABASE_ANON_KEY=... \
+  --dart-define=ENABLE_PUSH=false
 ```
 
-## Test on Android phones
+## Required Server-Side Secrets
 
-Questime now includes debug-phone scripts:
+Configure these in Supabase Edge Function secrets:
 
-```bash
-npm run android:devices
-npm run android:build
-npm run android:install
+```text
+GEMINI_API_KEY=
+ALLOWED_ORIGIN=*
+MAX_REQUEST_BYTES=12000
+MAX_IMAGE_BYTES=5242880
 ```
 
-The debug APK is generated at `android/app/build/outputs/apk/debug/app-debug.apk`. See [ANDROID_TESTING.md](./ANDROID_TESTING.md) for the full phone-testing checklist.
+`ALLOWED_IMAGE_HOSTS` is optional and defaults to the Supabase project host.
 
-## Server-side AI
+## Local Checks
 
-The OpenAI key belongs only in Supabase Edge Functions or local server env files. The Vite client reads only `VITE_` variables.
-
-Local env:
-
-```bash
-VITE_SUPABASE_URL=...
-VITE_SUPABASE_ANON_KEY=...
-OPENAI_MODEL=gpt-5.6
+```sh
+flutter pub get
+flutter analyze --no-fatal-infos
+flutter test
+flutter build web --release
+flutter build appbundle --release
+flutter build ios --release --no-codesign
 ```
 
-Keep `OPENAI_API_KEY` out of the Vite client. Use it only from Supabase Edge Functions or local server-side env files that are ignored by Git.
+GitHub Actions now verifies web, Android app bundle, and iOS no-codesign builds for pull requests.
 
-## Capacitor
+## Security Notes
 
-```bash
-npm run cap:add:ios
-npm run cap:add:android
-npm run cap:sync
-```
-
-Native screen-time bridge templates live in `native/`.
+Revoke any Gemini key that was previously committed to repository history. Before production, add Supabase migrations for RLS and Storage policies so the backend security model is versioned with the app.

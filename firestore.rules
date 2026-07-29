@@ -1,0 +1,100 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Users collection
+    // Allow all authenticated users to read basic user profiles (for friends/leaderboard)
+    // Only the owner can create/update/delete their own document
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isOwner(userId) && request.resource.data.id == userId;
+      allow update, delete: if isOwner(userId);
+    }
+    
+    // Missions collection - private, only mission owner can access
+    match /missions/{missionId} {
+      allow read: if isOwner(resource.data.user_id);
+      allow create: if isOwner(request.resource.data.user_id);
+      allow update, delete: if isOwner(resource.data.user_id);
+    }
+    
+    // Achievements collection - private, only user can access their achievements
+    match /achievements/{achievementId} {
+      allow read: if isOwner(resource.data.user_id);
+      allow create: if isOwner(request.resource.data.user_id);
+      allow update, delete: if isOwner(resource.data.user_id);
+    }
+    
+    // Friends collection - users can read friends where they're involved
+    match /friends/{friendId} {
+      allow read: if isAuthenticated() && (
+        request.auth.uid == resource.data.user_id ||
+        request.auth.uid == resource.data.friend_user_id
+      );
+      allow create: if isAuthenticated() && (
+        request.auth.uid == request.resource.data.user_id ||
+        request.auth.uid == request.resource.data.friend_user_id
+      );
+      allow update, delete: if isAuthenticated() && (
+        request.auth.uid == resource.data.user_id ||
+        request.auth.uid == resource.data.friend_user_id
+      );
+    }
+    
+    // Messages collection - accessible by sender and receiver
+    match /messages/{messageId} {
+      allow read: if isAuthenticated() && (
+        request.auth.uid == resource.data.sender_user_id ||
+        request.auth.uid == resource.data.receiver_user_id
+      );
+      allow create: if isAuthenticated() && 
+        request.auth.uid == request.resource.data.sender_user_id;
+      allow update: if isAuthenticated() && (
+        request.auth.uid == resource.data.sender_user_id ||
+        request.auth.uid == resource.data.receiver_user_id
+      );
+      allow delete: if isAuthenticated() && 
+        request.auth.uid == resource.data.sender_user_id;
+    }
+    
+    // Chat messages collection (Handler AI chats) - private, only user can access
+    match /chat_messages/{chatId} {
+      allow read: if isOwner(resource.data.user_id);
+      allow create: if isOwner(request.resource.data.user_id);
+      allow update, delete: if isOwner(resource.data.user_id);
+    }
+    
+    // Notifications collection
+    // Users can read/update/delete their own notifications
+    // Allow any authenticated user to create a notification (e.g., friend requests) —
+    // in production, prefer server-side creation or add additional validation
+    match /notifications/{notificationId} {
+      allow read: if isOwner(resource.data.user_id);
+      allow create: if isAuthenticated();
+      allow update, delete: if isOwner(resource.data.user_id);
+    }
+
+    // Bug reports collection
+    // Users can create bug reports; they can read their own
+    match /bug_reports/{bugReportId} {
+      allow read: if isOwner(resource.data.user_id);
+      allow create: if isAuthenticated();
+      allow update, delete: if isOwner(resource.data.user_id);
+    }
+
+    // Handlers collection - read-only for all authenticated users
+    match /handlers/{handlerId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Handlers are system-managed
+    }
+  }
+}
